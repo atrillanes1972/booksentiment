@@ -1,7 +1,9 @@
 import re
 import nltk
 #nltk.download("stopwords")
+#nltk.download("vader_lexicon")
 from nltk.corpus import stopwords
+from nltk.sentiment import SentimentIntensityAnalyzer
 
 
 with open ("miracle_in_the_andes.txt", "r", encoding='utf-8') as file:
@@ -30,4 +32,15 @@ for count, word in d_list:
     if word not in english_stopwords:
         filtered_words.append((word, count))
 
-print(filtered_words)
+#print(filtered_words)
+
+# Using nltk sentiment analyzer
+analyzer = SentimentIntensityAnalyzer()
+findings = analyzer.polarity_scores(book)
+#print(findings)
+pattern = re.compile("Chapter [0-9]+")
+chapters = re.split(pattern, book)
+chapters = chapters[1:]
+for nr, chapter in enumerate(chapters):
+    scores = analyzer.polarity_scores(chapter)
+    print(nr + 1, scores)
